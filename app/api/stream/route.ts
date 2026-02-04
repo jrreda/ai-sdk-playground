@@ -9,6 +9,15 @@ export async function POST(req: Request) {
       prompt,
     });
 
+    // log the usage of the stream
+    result.usage.then((usage) => {
+      console.log({
+        inputTokens: usage.inputTokens,
+        outputTokens: usage.outputTokens,
+        totalTokens: usage.totalTokens,
+      });
+    });
+
     return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error(`Error generating text: ${error}`);
