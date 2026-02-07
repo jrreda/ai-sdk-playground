@@ -8,7 +8,10 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: huggingface('deepseek-ai/DeepSeek-V3-0324'),
-      messages: modelMessages,
+      messages: [
+        {role: 'system', content: 'You are a helpful coding assistant. Keep responses under 3 sentences and focus on practical examples.'},
+        ...modelMessages,
+      ],
     });
 
     // log the usage of the stream
