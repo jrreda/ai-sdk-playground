@@ -6,6 +6,7 @@ import { useChat } from "@ai-sdk/react";
 export default function ChatPage() {
   const [message, setMessage] = useState("");
 
+  // default endpoint is /api/chat
   const { messages, sendMessage, status, error, stop } = useChat();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
