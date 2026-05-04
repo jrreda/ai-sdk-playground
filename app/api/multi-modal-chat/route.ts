@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const { messages }: { messages: UIMessage[] } = await req.json();
 
     const result = streamText({
-      model: huggingface("Qwen/Qwen2.5-VL-3B-Instruct"),
+      model: huggingface("Qwen/Qwen3-VL-2B-Instruct"),
       messages: await convertToModelMessages(messages),
     });
 

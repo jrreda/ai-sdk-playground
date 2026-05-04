@@ -27,8 +27,8 @@ export default function MultiModalChatPage() {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-md pt-12 pb-36 mx-auto stretch">
-      {error && <div className="text-red-500 mb-4">{error.message}</div>}
+    <div className="flex flex-col mx-auto pt-12 pb-36 w-full max-w-md stretch">
+      {error && <div className="mb-4 text-red-500">{error.message}</div>}
 
       {messages.map((message) => (
         <div key={message.id} className="mb-4">
@@ -69,7 +69,17 @@ export default function MultiModalChatPage() {
                     />
                   );
                 }
-                return null;
+                if (part.mediaType?.startsWith("audio/")) {
+                  return (
+                    <iframe
+                      key={`${message.id}-${index}`}
+                      src={part.url}
+                      width="500"
+                      height="600"
+                      title={part.filename ?? `attachment-${index}`}
+                    />
+                  );
+                }
               default:
                 return null;
             }
@@ -80,20 +90,20 @@ export default function MultiModalChatPage() {
       {(status === "submitted" || status === "streaming") && (
         <div className="mb-4">
           <div className="flex items-center gap-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+            <div className="border-blue-400 border-b-2 rounded-full w-4 h-4 animate-spin"></div>
           </div>
         </div>
       )}
 
       <form
         onSubmit={handleSubmit}
-        className="fixed bottom-0 w-full max-w-md mx-auto left-0 right-0 p-4 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 shadow-lg"
+        className="right-0 bottom-0 left-0 fixed bg-zinc-50 dark:bg-zinc-950 shadow-lg mx-auto p-4 border-zinc-200 dark:border-zinc-800 border-t w-full max-w-md"
       >
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <label
               htmlFor="file-upload"
-              className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 cursor-pointer"
+              className="flex items-center gap-2 text-zinc-600 hover:text-zinc-800 dark:hover:text-zinc-200 dark:text-zinc-400 text-sm cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +137,7 @@ export default function MultiModalChatPage() {
           </div>
           <div className="flex gap-2">
             <input
-              className="flex-1 dark:bg-zinc-800 p-2 border border-zinc-300 dark:border-zinc-700 rounded shadow-xl"
+              className="flex-1 dark:bg-zinc-800 shadow-xl p-2 border border-zinc-300 dark:border-zinc-700 rounded"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="How can I help you?"
@@ -135,14 +145,14 @@ export default function MultiModalChatPage() {
             {status === "submitted" || status === "streaming" ? (
               <button
                 onClick={stop}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white transition-colors"
               >
                 Stop
               </button>
             ) : (
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 px-4 py-2 rounded text-white transition-colors disabled:cursor-not-allowed"
                 disabled={status !== "ready"}
               >
                 Send
